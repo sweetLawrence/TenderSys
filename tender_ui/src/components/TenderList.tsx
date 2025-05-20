@@ -193,34 +193,6 @@ const TenderList = () => {
     const res = await axiosInstance.get('/api/tenders')
     console.log(res.data)
     setTenders(res.data)
-
-    // Dummy tenders for preview
-    // const dummy: Tender[] = [
-    //   {
-    //     id: 1,
-    //     title: 'Construction of Science Laboratory',
-    //     description: 'This tender covers civil works and plumbing for a new science lab.',
-    //     financial_year: '2024/2025',
-    //     deadline: '2025-03-01',
-    //     document: 'https://example.com/tenders/lab.pdf'
-    //   },
-    //   {
-    //     id: 2,
-    //     title: 'Supply of Office Furniture',
-    //     description: 'Provision of desks, chairs, and cabinets for the administrative block.',
-    //     financial_year: '2024/2025',
-    //     deadline: '2025-02-15',
-    //     document: 'https://example.com/tenders/furniture.pdf'
-    //   },
-    //   {
-    //     id: 3,
-    //     title: 'ICT Equipment Procurement',
-    //     description: 'Supply and installation of computers, printers, and networking equipment.',
-    //     financial_year: '2024/2025',
-    //     deadline: '2025-04-10',
-    //     document: 'https://example.com/tenders/ict.pdf'
-    //   }
-    // ]
   }
 
   useEffect(() => {
@@ -234,7 +206,9 @@ const TenderList = () => {
     if (!confirmDelete) return
 
     try {
-      // await axios.delete(`/api/tenders/${id}`)
+    //   await axios.delete(`/api/tenders/${id}`)
+      await axiosInstance.delete(`/api/tenders/${id}`)
+
       setTenders(prev => prev.filter(t => t.id !== id))
       alert('Tender deleted')
     } catch (err) {
@@ -257,11 +231,26 @@ const TenderList = () => {
 
     try {
       // Simulate upload
-      console.log('Simulating upload for', selectedTender.id)
+      //   console.log('Simulating upload for', selectedTender.id)
+      //   setEditModalOpen(false)
+      //   setSelectedTender(null)
+      //   setNewFile(null)
+      //   alert('Tender document updated (dummy)')
+
+      const formData = new FormData()
+      formData.append('document', newFile)
+
+      await axiosInstance.patch(`/api/tenders/${selectedTender.id}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+
       setEditModalOpen(false)
       setSelectedTender(null)
       setNewFile(null)
-      alert('Tender document updated (dummy)')
+      fetchTenders()
+      alert('Tender document updated')
     } catch (err) {
       console.error(err)
       alert('Update failed')
@@ -292,7 +281,7 @@ const TenderList = () => {
                 <Text size='sm' color='dimmed'>
                   FY: {tender.financial_year}
                 </Text>
-                  <Text size='sm' color='dimmed'>
+                <Text size='sm' color='dimmed'>
                   Deadline: {tender.deadline}
                 </Text>
                 <Text mt='xs'>{tender.description}</Text>

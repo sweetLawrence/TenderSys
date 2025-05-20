@@ -16,7 +16,7 @@ const corsOptions = {
 
 // ROUTERS
 
-app.get("TENDER SYSTEM IS ONLINE")
+
 
 app.use(express.json())
 app.use(cors());
