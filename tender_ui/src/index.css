@@ -1,0 +1,16 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap'); */
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight.css" layer(base);
+@import "tailwindcss/utilities.css";
+
+
+
+* {
+  box-sizing: border-box;
+}
+
+@layer theme, base, components, utilities;
+
+@theme {}
+
+@layer components {}
