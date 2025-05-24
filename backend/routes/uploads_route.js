@@ -41,7 +41,7 @@ router.post('/', upload.single('document'), async (req, res) => {
 
 const path = require('path')
 
-// GET /api/tenders - fetch all tenders with download URLs
+// fetch all tenders with download URLs
 router.get('/', async (req, res) => {
   try {
     const tenders = await Tenders.findAll({
@@ -56,9 +56,9 @@ router.get('/', async (req, res) => {
     })
 
     const host = req.get('host') // e.g., localhost:3000 or your domain
-    const protocol = req.protocol // http or https
+    // const protocol = req.protocol 
+    const protocol = 'https'
 
-    // Add download URL for each tender's document
     const tendersWithDownloadUrl = tenders.map(tender => ({
       id: tender.id,
       title: tender.title,

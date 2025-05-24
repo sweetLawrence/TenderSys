@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-let prod_base_url = 'https://tenders.kenyenyattc.co.ke';
+let prod_base_url = 'https://tenders.kenyenyattc.ac.ke';
 let local_base_url = 'http://localhost:3000'
 
 const getBaseURL = () => {

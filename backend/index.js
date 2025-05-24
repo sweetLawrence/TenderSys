@@ -16,7 +16,9 @@ const corsOptions = {
 
 // ROUTERS
 
-
+app.get('/',(req,res)=>{
+    res.json("Tender System is Active")
+})
 
 app.use(express.json())
 app.use(cors());
