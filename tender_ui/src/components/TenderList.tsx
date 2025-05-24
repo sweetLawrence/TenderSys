@@ -170,6 +170,7 @@ import {
   Title
 } from '@mantine/core'
 
+import { FiFile } from 'react-icons/fi'
 import axiosInstance from '../utils/axios'
 
 type Tender = {
@@ -206,7 +207,7 @@ const TenderList = () => {
     if (!confirmDelete) return
 
     try {
-    //   await axios.delete(`/api/tenders/${id}`)
+      //   await axios.delete(`/api/tenders/${id}`)
       await axiosInstance.delete(`/api/tenders/${id}`)
 
       setTenders(prev => prev.filter(t => t.id !== id))
@@ -264,7 +265,16 @@ const TenderList = () => {
       </Title>
 
       {tenders.length === 0 ? (
-        <Text>No tenders found.</Text>
+        // <Text className='ml-6'>No tenders found.</Text>
+        <div className='flex flex-col items-center justify-center p-10 rounded-lg border border-gray-200 shadow-sm w-[95%] mx-auto bg-white'>
+          <FiFile size={48} className='text-gray-400 mb-3' />
+          <h2 className='text-lg font-semibold text-gray-700'>
+            No Tenders Found
+          </h2>
+          <p className='text-sm text-gray-500 mt-1'>
+            Please check back later or contact the administrator.
+          </p>
+        </div>
       ) : (
         tenders.map(tender => (
           <Card
