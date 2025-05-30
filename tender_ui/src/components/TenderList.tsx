@@ -1,164 +1,3 @@
-// import { useEffect, useState } from 'react'
-// import {
-//   Button,
-//   Card,
-//   Group,
-//   Text,
-//   FileInput,
-//   Modal,
-//   Title
-// } from '@mantine/core'
-// import axios from 'axios'
-
-// type Tender = {
-//   id: number
-//   title: string
-//   description: string
-//   financial_year: string
-//   deadline: string
-//   document: string
-// }
-
-// const TenderList = () => {
-//   const [tenders, setTenders] = useState<Tender[]>([])
-//   const [editModalOpen, setEditModalOpen] = useState(false)
-//   const [selectedTender, setSelectedTender] = useState<Tender | null>(null)
-//   const [newFile, setNewFile] = useState<File | null>(null)
-
-//   const fetchTenders = async () => {
-//     // const res = await axios.get('/api/tenders')
-//     // setTenders(res.data)
-//   }
-
-//   useEffect(() => {
-//     fetchTenders()
-//   }, [])
-
-//   const handleDelete = async (id: number) => {
-//     const confirmDelete = window.confirm(
-//       'Are you sure you want to delete this tender?'
-//     )
-//     if (!confirmDelete) return
-
-//     try {
-//       await axios.delete(`/api/tenders/${id}`)
-//       fetchTenders()
-//       alert('Tender deleted')
-//     } catch (err) {
-//       console.error(err)
-//       alert('Delete failed')
-//     }
-//   }
-
-//   const openEditModal = (tender: Tender) => {
-//     setSelectedTender(tender)
-//     setEditModalOpen(true)
-//     setNewFile(null)
-//   }
-
-//   const handleUpdate = async () => {
-//     if (!selectedTender || !newFile) return
-
-//     const confirmUpdate = window.confirm('Upload new document for this tender?')
-//     if (!confirmUpdate) return
-
-//     const formData = new FormData()
-//     formData.append('document', newFile)
-
-//     try {
-//       await axios.put(`/api/tenders/${selectedTender.id}`, formData, {
-//         headers: { 'Content-Type': 'multipart/form-data' }
-//       })
-//       setEditModalOpen(false)
-//       setSelectedTender(null)
-//       setNewFile(null)
-//       fetchTenders()
-//       alert('Tender updated')
-//     } catch (err) {
-//       console.error(err)
-//       alert('Update failed')
-//     }
-//   }
-
-//   return (
-//     <div className='max-w-5xl mx-auto mt-10 space-y-6'>
-//       <Title order={2}>Available Tenders</Title>
-
-//       {tenders.length === 0 ? (
-//         <Text>No tenders found.</Text>
-//       ) : (
-//         tenders?.map(tender => (
-//           <Card key={tender.id} shadow='md' p='lg' radius='md' withBorder>
-//             <Group>
-//               <div>
-//                 <Text>{tender.title}</Text>
-//                 <Text size='sm' color='dimmed'>
-//                   FY: {tender.financial_year} — Deadline: {tender.deadline}
-//                 </Text>
-//               </div>
-//               <Group>
-//                 <Button
-//                   size='xs'
-//                   color='blue'
-//                   onClick={() => openEditModal(tender)}
-//                 >
-//                   Edit
-//                 </Button>
-//                 <Button
-//                   size='xs'
-//                   color='red'
-//                   onClick={() => handleDelete(tender.id)}
-//                 >
-//                   Delete
-//                 </Button>
-//               </Group>
-//             </Group>
-//             <Text mt='sm'>{tender.description}</Text>
-//             <a
-//               href={tender.document}
-//               target='_blank'
-//               rel='noopener noreferrer'
-//               className='text-blue-600 text-sm underline mt-2 inline-block'
-//             >
-//               View Document
-//             </a>
-//           </Card>
-//         ))
-//       )}
-
-//       <Modal
-//         opened={editModalOpen}
-//         onClose={() => setEditModalOpen(false)}
-//         title='Update Tender Document'
-//         centered
-//       >
-//         <FileInput
-//           label='New Document'
-//           placeholder='Choose new file'
-//           accept='.pdf,.doc,.docx'
-//           value={newFile}
-//           onChange={setNewFile}
-//           required
-//         />
-//         <Group mt='md'>
-//           <Button onClick={handleUpdate} disabled={!newFile}>
-//             Upload
-//           </Button>
-//           <Button
-//             variant='outline'
-//             color='gray'
-//             onClick={() => setEditModalOpen(false)}
-//           >
-//             Cancel
-//           </Button>
-//         </Group>
-//       </Modal>
-//     </div>
-//   )
-// }
-
-// export default TenderList
-
 import { useEffect, useState } from 'react'
 import {
   Button,
@@ -172,6 +11,7 @@ import {
 
 import { FiFile } from 'react-icons/fi'
 import axiosInstance from '../utils/axios'
+import { Toaster, toast } from 'sonner'
 
 type Tender = {
   id: number
@@ -211,10 +51,12 @@ const TenderList = () => {
       await axiosInstance.delete(`/api/tenders/${id}`)
 
       setTenders(prev => prev.filter(t => t.id !== id))
-      alert('Tender deleted')
+      // alert('Tender deleted')
+      toast.success('Tender Deleted Successfully')
     } catch (err) {
       console.error(err)
-      alert('Delete failed')
+      // alert('Delete failed')
+      toast.error('Deletion Failed. Try again')
     }
   }
 
@@ -251,10 +93,12 @@ const TenderList = () => {
       setSelectedTender(null)
       setNewFile(null)
       fetchTenders()
-      alert('Tender document updated')
+      // alert('Tender document updated')
+      toast.success('Tender document updated')
     } catch (err) {
       console.error(err)
-      alert('Update failed')
+      // alert('Update failed')
+      toast.error('Update Failed. Try again')
     }
   }
 
@@ -276,7 +120,7 @@ const TenderList = () => {
           </p>
         </div>
       ) : (
-        tenders.map(tender => (
+        tenders?.map(tender => (
           <Card
             key={tender.id}
             shadow='md'
@@ -352,6 +196,7 @@ const TenderList = () => {
           </Button>
         </Group>
       </Modal>
+      <Toaster richColors position='top-right' className='py-5'/>
     </div>
   )
 }

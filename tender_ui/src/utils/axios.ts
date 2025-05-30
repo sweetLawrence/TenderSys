@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 let prod_base_url = 'https://tenders.kenyenyattc.ac.ke';
-let local_base_url = 'http://localhost:3000'
+// let local_base_url = 'http://localhost:3000'
+let local_base_url = 'https://tenders.kenyenyattc.ac.ke'
 
 const getBaseURL = () => {
     const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
@@ -15,7 +16,7 @@ const getBaseURL = () => {
 
 const axiosInstance = axios.create({
   baseURL: getBaseURL(),
-  timeout: 10000,
+  // timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
     'ngrok-skip-browser-warning': 'true', 

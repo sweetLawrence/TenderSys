@@ -1,9 +1,12 @@
 import { useState } from 'react'
 import { Button, TextInput, Textarea, Group, FileInput } from '@mantine/core'
+import { Toaster, toast } from 'sonner'
 
 import axiosInstance from '../utils/axios'
 
 const TenderForm = () => {
+  const [loading, setLoading] = useState(false)
+
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -25,6 +28,7 @@ const TenderForm = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    setLoading(true)
 
     try {
       const payload = new FormData()
@@ -34,15 +38,19 @@ const TenderForm = () => {
       payload.append('deadline', formData.deadline)
       if (formData.document) payload.append('document', formData.document)
 
-    //   console.log('FormData content:')
-    //   for (const [key, value] of payload.entries()) {
-    //     console.log(`${key}:`, value)
-    //   }
-      await axiosInstance.post('/api/tenders', payload, {
+      //   console.log('FormData content:')
+      //   for (const [key, value] of payload.entries()) {
+      //     console.log(`${key}:`, value)
+      //   }
+      let response = await axiosInstance.post('/api/tenders', payload, {
         headers: { 'Content-Type': 'multipart/form-data' }
       })
 
-      alert('Tender submitted successfully!')
+      if (response.data.message == 'Tender uploaded successfully') {
+        setLoading(false)
+      }
+      toast.success(response.data.message)
+
       setFormData({
         title: '',
         description: '',
@@ -50,9 +58,14 @@ const TenderForm = () => {
         deadline: '',
         document: null
       })
+      // setTimeout(() => {
+      //   window.location.reload()
+      // }, 2000)
+
     } catch (error) {
       console.error('Upload failed:', error)
-      alert('Upload failed!')
+      // alert('Upload failed!')
+      toast.error('Upload Failed, please try again or contact administrator')
     }
   }
 
@@ -97,14 +110,18 @@ const TenderForm = () => {
       <FileInput
         label='Document'
         placeholder='Upload tender document'
+        value={formData.document}
         onChange={handleFileChange}
         accept='.pdf,.doc,.docx'
         required
       />
 
       <Group>
-        <Button type='submit'>Submit</Button>
+        <Button type='submit' loading={loading}>
+          Submit
+        </Button>
       </Group>
+      <Toaster richColors position='top-right' className='py-5'/>
     </form>
   )
 }
