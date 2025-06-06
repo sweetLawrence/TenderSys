@@ -24,6 +24,7 @@ router.post('/', upload.single('document'), async (req, res) => {
     }
 
     // Create tender record with document filename saved
+
     const tender = await Tenders.create({
       title,
       description,
@@ -56,7 +57,7 @@ router.get('/', async (req, res) => {
     })
 
     const host = req.get('host') // e.g., localhost:3000 or your domain
-    // const protocol = req.protocol 
+    // const protocol = req.protocol
     const protocol = 'https'
 
     const tendersWithDownloadUrl = tenders.map(tender => ({
